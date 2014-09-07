@@ -141,7 +141,7 @@ body {
 		<div class="pageModals"></div>
 		<footer>
 			<p class="pull-left">
-				&copy; <a href="https://github.com/gravytrain/automation-interface" target="_blank">OpenSource GitHub Project</a>
+				&copy; <a href="#" target="_blank">OpenSource GitHub Project</a>
 				2014
 			</p>
 		</footer>

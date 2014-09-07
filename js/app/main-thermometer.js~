@@ -1,0 +1,4 @@
+require(["jquery", "temp-table"], function($, tempTable) {
+
+   tempTable.displayEventDetails('#historic-table', 'DrWahlBBQ', 's1');
+});

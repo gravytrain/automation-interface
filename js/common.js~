@@ -28,7 +28,7 @@ requirejs.config({
 		"serialize-object" : "jquery/jquery.serializeObject",
 		"charisma" : "thirdparty/charisma",
 		"menu" : "views/main-menu",
-		"theme" : "thirdparty/theme-selector",
+		"theme" : "thirdparty/theme-selector"
 		"temp-table" : "views/temperature-tables"
 	},
 	// shim
