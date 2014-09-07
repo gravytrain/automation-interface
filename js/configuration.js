@@ -4,7 +4,7 @@ define({
 
 	webServiceSettings : {
 		"" : {
-			"MongoPimometer" : "http://localhost/pi_mometer/pi_collection/"
+			"MongoPimometer" : "http://mongo.drwahl.me:28017/pi_mometer/pi_collection/"
 		}
 	},
 

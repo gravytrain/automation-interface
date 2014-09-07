@@ -29,7 +29,8 @@ requirejs.config({
 		"charisma" : "thirdparty/charisma",
 		"menu" : "views/main-menu",
 		"theme" : "thirdparty/theme-selector",
-		"temp-table" : "views/temperature-tables"
+		"temp-table" : "views/temperature-tables",
+		"d3" : "thirdparty/d3.min"
 	},
 	// shim
 	shim : {
