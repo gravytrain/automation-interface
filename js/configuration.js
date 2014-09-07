@@ -3,14 +3,14 @@ define({
 	version : "Insert Version Here",
 
 	webServiceSettings : {
-		"host:port" : {
-			"WebServiceURL" : "URL"
+		"" : {
+			"MongoPimometer" : "http://mongo.drwahl.me:28017/pi_mometer/pi_collection/"
 		}
 	},
 
 	clientSettings : {
 		"default" : {
-			"RefreshInterval" : 5000,
+			"RefreshInterval" : 60000,
 			"RequestTimeout" : 10000,
 			"TimezoneOffset" : "put an offset here"
 		}
@@ -64,15 +64,6 @@ define({
 		}, {
 			"name" : "Historical",
 			"link" : "hist-thermometer.html",
-			"icon" : "icon name"
-		} ],
-		"Thermostat" : [ {
-			"name" : "Real Time",
-			"link" : "thermostat.html",
-			"icon" : "icon name"
-		}, {
-			"name" : "Historical",
-			"link" : "hist-thermostat.html",
 			"icon" : "icon name"
 		} ]
 	}
