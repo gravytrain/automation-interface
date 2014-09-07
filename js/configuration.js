@@ -3,7 +3,7 @@ define({
 	version : "Insert Version Here",
 
 	webServiceSettings : {
-		"" : {
+		"localhost" : {
 			"MongoPimometer" : "http://localhost:28017/pi_mometer/pi_collection/"
 		}
 	},
