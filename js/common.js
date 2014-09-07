@@ -58,6 +58,7 @@ require([ "jquery", "utilities", "menu", "dropdown", "jquery-ui", "theme", "unif
 
 		menu.getMenu('.main-menu');
 
+		$( document ).ready( function() {
 		$('ul.main-menu li a').each(function() {
 			if ($($(this))[0].href == String(window.location))
 				$(this).parent().addClass('active');
@@ -71,6 +72,8 @@ require([ "jquery", "utilities", "menu", "dropdown", "jquery-ui", "theme", "unif
 			$(this).animate({
 				'margin-left' : '-=5'
 			}, 300);
+		});
+		
 		});
 	
 });

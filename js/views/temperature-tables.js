@@ -2,32 +2,41 @@ define([ "jquery", "configuration", "datatables" ], function($, config, DataTabl
   
   var _host = window.location.host; 
   var _oWebService = config.webServiceSettings[_host];
+  var _oClientSettings = config.clientSettings['default'];
   
-	var getEventList = function() {
+	var getEventList = function(selector) {
 	  	$.ajax({
-		url : '',
+		url : _oWebService.MongoPimometer,
 		dataType : 'jsonp',
-		timeout : 4000,
-		success : function(data) {
-
-			aData.status = agentStatus(data.agentStatus);
-			var table = $('.existing-users').DataTable();
-			table.row(rowIndex).data(aData).draw(false);
+		jsonp : 'jsonp',
+		timeout : _oClientSettings.RequestTimeout,
+		success : function(json) {
+		  console.log(json);
+		  $.each(json.rows, function(index, row) {
+		    if( row['_id'] != 'client_config' ) {
+		      $(selector).append($('<option></option>').attr('value', row['_id']).text(row['_id']));
+		    }
+		  });
 		}
-	});
+		});
 	  
-	}
+	};
   
 	var displayEventDetails = function(selector, event, sensor) {
 	  
 	  var config;
-	  $(selector).closest(".box").children(".box-header").children("h2").html( event + " Historical Temperatures : " + sensor ); 
+	  $(selector).closest(".box").children(".box-header").children("h2").html( event + " Historical Temperatures : " + sensor );
+	  
+	  if ( $.fn.dataTable.isDataTable( selector ) ) {
+	    $(selector).DataTable().destroy();
+	  }
 	  
 		var table = $(selector).DataTable({
 		  "ajax" : {
 		  	"url" : _oWebService.MongoPimometer,
 			"dataType" : "jsonp",
 			"jsonp" : 'jsonp',
+			"timeout" : _oClientSettings.RequestTimeout,
 			"dataSrc" : function( json ) {
 			  
 			  var newArray = [];
@@ -61,6 +70,7 @@ define([ "jquery", "configuration", "datatables" ], function($, config, DataTabl
 		  "paging" : true,
 		  "searching" : true,
 		  "autoWidth" : false,
+		  "retrieve" : true,
 		  "info" : true,
 		  "language" : {
 		    "emptyTable" : "Historical Temperatures not yet available.",
@@ -74,6 +84,7 @@ define([ "jquery", "configuration", "datatables" ], function($, config, DataTabl
 	};
 	
 	return {
+		getEventList : getEventList,
 		displayEventDetails : displayEventDetails
 		
 	};

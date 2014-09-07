@@ -1,5 +1,11 @@
-require(["jquery", "temp-table"], function($, tempTable) {
+require(["jquery", "temp-table", "datatables"], function($, tempTable, DataTable) {
 
-   tempTable.displayEventDetails('#historic-s1', 'DrWahlBBQ', 's1');
-   tempTable.displayEventDetails('#historic-s2', 'DrWahlBBQ', 's2');
+   tempTable.getEventList('#selectEvent');
+  
+   $('#selectEvent').on('change', function(evt) {
+      var selected = $('#selectEvent option:selected').text();
+
+      tempTable.displayEventDetails('#historic-s1', selected, 's1');
+      tempTable.displayEventDetails('#historic-s2', selected, 's2');
+   });
 });
