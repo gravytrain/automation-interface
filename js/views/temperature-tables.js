@@ -22,7 +22,7 @@ define([ "jquery", "configuration", "datatables" ], function($, config, DataTabl
 	  
 	};
   
-	var displayEventDetails = function(selector, event, sensor) {
+	var displayEventDetails = function(selector, event, sensor, callback) {
 	  
 	  var config;
 	  $(selector).closest(".box").children(".box-header").children("h2").html( event + " Historical Temperatures : " + sensor );
@@ -53,6 +53,9 @@ define([ "jquery", "configuration", "datatables" ], function($, config, DataTabl
 			      config = row;
 			    }  
 			  });
+			  if( callback !== undefined) {
+			  callback(newArray);
+			  }
 			  return newArray;
 			}
 		  },
@@ -74,11 +77,6 @@ define([ "jquery", "configuration", "datatables" ], function($, config, DataTabl
 		  "info" : true,
 		  "language" : {
 		    "emptyTable" : "Historical Temperatures not yet available.",
-		  },
-		  "initComplete" : function( data ) {
-		    setInterval( function() {
-		      table.ajax.reload();
-		    }, config.poll_interval*1000 );
 		  }
 		}); 
 	};
