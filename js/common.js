@@ -31,7 +31,9 @@ requirejs.config({
 		"theme" : "thirdparty/theme-selector",
 		"temp-tables" : "views/temperature-tables",
 		"temp-graphs" : "views/temperature-graphs",
-		"d3" : "thirdparty/d3.min"
+		"temp-charts" : "views/temperature-charts",
+		"d3" : "thirdparty/d3.min",
+		"charts" : "thirdparty/Chart"
 	},
 	// shim
 	shim : {

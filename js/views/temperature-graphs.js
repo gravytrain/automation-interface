@@ -1,4 +1,4 @@
-define(["jquery", "configuration", "datatables", "d3"], function($, config, DataTable, d3) {
+define(["jquery", "configuration", "d3"], function($, config, d3) {
 
 	var _host = window.location.host;
 	var _oWebService = config.webServiceSettings[_host];
@@ -43,15 +43,15 @@ define(["jquery", "configuration", "datatables", "d3"], function($, config, Data
 
 		svg.append("svg:path").attr("d", line(data));
 
-//		svg.selectAll("circle").data(data.sort(function(a, b) {
-//			return a.timestamp - b.timestamp;
-//		}), function(d) {
-//			return d.temperature;
-//		}).enter().append("svg:circle").attr("r", 4).attr("cx", function(d) {
-//			return x(dateFn(d));
-//		}).attr("cy", function(d) {
-//			return y(tempFn(d));
-//		});
+		svg.selectAll("circle").data(data.sort(function(a, b) {
+			return a.timestamp - b.timestamp;
+		}), function(d) {
+			return d.temperature;
+		}).enter().append("svg:circle").attr("r", 4).attr("cx", function(d) {
+			return x(dateFn(d));
+		}).attr("cy", function(d) {
+			return y(tempFn(d));
+		});
 
 		svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + 180 + ")").call(xAxis);
 

@@ -1,4 +1,4 @@
-require(["jquery", "temp-tables", "temp-graphs", "datatables"], function($, tempTable, tempGraph, DataTable) {
+require(["jquery", "temp-tables", "temp-graphs", "datatables", "temp-charts"], function($, tempTable, tempGraph, DataTable, tempCharts) {
 
 	tempTable.getEventList('#selectEvent');
 
@@ -10,9 +10,11 @@ require(["jquery", "temp-tables", "temp-graphs", "datatables"], function($, temp
 		$('#graph').empty();
 		
 		tempTable.displayEventDetails('#historic-s1', selected, 's1', function(data) {
-			console.log(JSON.stringify(data));
-			tempGraph.showLineGraph('#graph', data);
+			console.log(data);
+			tempCharts.showLineChart('#myChart1', data);
 		});
-		tempTable.displayEventDetails('#historic-s2', selected, 's2');
+		tempTable.displayEventDetails('#historic-s2', selected, 's2', function(data) {
+			tempCharts.showLineChart('#myChart2', data);
+		});
 	});
 }); 
