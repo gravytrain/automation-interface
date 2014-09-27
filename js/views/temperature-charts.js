@@ -1,4 +1,4 @@
-define(["jquery", "configuration", "charts"], function($, config, Chart) {
+define(["jquery", "configuration", "charts", "moment"], function($, config, Chart, moment) {
 
 	var showLineChart = function(selector, dataElement1) {
 		
@@ -6,9 +6,22 @@ define(["jquery", "configuration", "charts"], function($, config, Chart) {
 		var tempArray = [];
 		
 		$.each(dataElement1, function(index, obj) {
+			
+			if(moment(obj.timestamp).isValid()) {
+			
+			if( index % 10 == 0) {
+				timeArray.push(moment(obj.timestamp).format("ddd. h:m"));
+			} else if ( index % 5 == 0){
+				timeArray.push(moment(obj.timestamp).format("h:m"));
+			} else {
+				timeArray.push("");
+			}
 			tempArray.push(obj.temperature);
-			timeArray.push(obj.timestamp);
+			
+			}
 		});
+		
+		
 		
 		Chart.defaults.global = {
 			// Boolean - Whether to animate the chart
@@ -65,7 +78,7 @@ define(["jquery", "configuration", "charts"], function($, config, Chart) {
 			scaleFontColor : "#666",
 
 			// Boolean - whether or not the chart should be responsive and resize when the browser does.
-			responsive : false,
+			responsive : true,
 
 			// Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
 			maintainAspectRatio : true,
@@ -107,10 +120,10 @@ define(["jquery", "configuration", "charts"], function($, config, Chart) {
 			tooltipYPadding : 0,
 
 			// Number - pixel width of padding around tooltip text
-			tooltipXPadding : 0,
+			tooltipXPadding : 5,
 
 			// Number - Size of the caret on the tooltip
-			tooltipCaretSize : 8,
+			tooltipCaretSize : 5,
 
 			// Number - Pixel radius of the tooltip border
 			tooltipCornerRadius : 6,
@@ -119,7 +132,7 @@ define(["jquery", "configuration", "charts"], function($, config, Chart) {
 			tooltipXOffset : 10,
 
 			// String - Template string for single tooltips
-			tooltipTemplate : "<%if (label){%><%=label%>: <%}%><%= value %>",
+			tooltipTemplate : "<%if (label){%><%=label%> - <%}%><%= value %>",
 
 			// String - Template string for single tooltips
 			multiTooltipTemplate : "<%= value %>",
