@@ -1,28 +1,31 @@
 define(["jquery", "configuration", "charts", "moment"], function($, config, Chart, moment) {
 
+	var myLineChart = null;
+
 	var showLineChart = function(selector, dataElement1) {
-		
+
 		var timeArray = [];
-		var tempArray = [];
-		
+		var s1Array = [];
+		var s2Array = [];
+
+		console.log(dataElement1);
 		$.each(dataElement1, function(index, obj) {
-			
-			if(moment(obj.timestamp).isValid()) {
-			
-			if( index % 10 == 0) {
-				timeArray.push(moment(obj.timestamp).format("ddd. h:m"));
-			} else if ( index % 5 == 0){
-				timeArray.push(moment(obj.timestamp).format("h:m"));
-			} else {
-				timeArray.push("");
-			}
-			tempArray.push(obj.temperature);
-			
+
+			if (moment(obj.timestamp).isValid()) {
+
+				if (index % 10 == 0) {
+					timeArray.push(moment(obj.timestamp).format("ddd. h:m"));
+				} else if (index % 5 == 0) {
+					timeArray.push(moment(obj.timestamp).format("h:m"));
+				} else {
+					timeArray.push("");
+				}
+				s1Array.push(obj.s1);
+				s2Array.push(obj.s2);
+
 			}
 		});
-		
-		
-		
+
 		Chart.defaults.global = {
 			// Boolean - Whether to animate the chart
 			animation : true,
@@ -81,7 +84,7 @@ define(["jquery", "configuration", "charts", "moment"], function($, config, Char
 			responsive : true,
 
 			// Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-			maintainAspectRatio : true,
+			maintainAspectRatio : false,
 
 			// Boolean - Determines whether to draw tooltips on the canvas or not
 			showTooltips : true,
@@ -149,14 +152,23 @@ define(["jquery", "configuration", "charts", "moment"], function($, config, Char
 		var data = {
 			labels : timeArray,
 			datasets : [{
-				label : "My First dataset",
+				label : "Sensor 1",
 				fillColor : "rgba(220,220,220,0.2)",
 				strokeColor : "rgba(220,220,220,1)",
 				pointColor : "rgba(220,220,220,1)",
 				pointStrokeColor : "#fff",
 				pointHighlightFill : "#fff",
 				pointHighlightStroke : "rgba(220,220,220,1)",
-				data : tempArray
+				data : s1Array
+			}, {
+				label : "sensor 2",
+				fillColor : "rgba(151,187,205,0.2)",
+				strokeColor : "rgba(151,187,205,1)",
+				pointColor : "rgba(151,187,205,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(151,187,205,1)",
+				data : s2Array
 			}]
 		};
 
@@ -205,10 +217,28 @@ define(["jquery", "configuration", "charts", "moment"], function($, config, Char
 
 		// Get context with jQuery - using jQuery's .get() method.
 		var ctx = $(selector).get(0).getContext("2d");
-		var myLineChart = new Chart(ctx).Line(data, options);
+		myLineChart = new Chart(ctx).Line(data, options);
+
+		$(selector).get(0).onclick = function(evt) {
+			var activePoints = myLineChart.getPointsAtEvent(evt);
+			console.log(evt);
+			console.log(activePoints);
+			// => activePoints is an array of points on the canvas that are at the same position as the click event.
+			ctx.moveTo(evt.layerX, 10);
+			ctx.lineTo(evt.layerX, 413);
+			ctx.strokeStyle = "brown";
+			ctx.stroke();
+		};
 	};
+	
+	var destroyChart = function() {
+		if(myLineChart != null) {
+			myLineChart.destroy();	
+		}
+	}
 
 	return {
 		showLineChart : showLineChart,
+		destroyChart : destroyChart
 	};
 });

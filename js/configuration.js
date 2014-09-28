@@ -15,7 +15,8 @@ define({
 		"default" : {
 			"RefreshInterval" : 60000,
 			"RequestTimeout" : 10000,
-			"TimezoneOffset" : "put an offset here"
+			"TimezoneOffset" : "put an offset here",
+			"NumberSensors"	: 2
 		}
 	},
 

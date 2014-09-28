@@ -3,6 +3,7 @@ require(["jquery", "temp-tables", "temp-graphs", "datatables", "temp-charts"], f
 	tempTable.getEventList('#selectEvent');
 
 	$('#selectEvent').on('change', function(evt) {
+		tempCharts.destroyChart();
 		var selected = $('#selectEvent option:selected').text();
 
 		$('#historic-s1').empty();
@@ -10,7 +11,6 @@ require(["jquery", "temp-tables", "temp-graphs", "datatables", "temp-charts"], f
 		$('#graph').empty();
 		
 		tempTable.displayEventDetails('#historic-s1', selected, 's1', function(data) {
-			console.log(data);
 			tempCharts.showLineChart('#myChart1', data);
 		});
 		tempTable.displayEventDetails('#historic-s2', selected, 's2', function(data) {
