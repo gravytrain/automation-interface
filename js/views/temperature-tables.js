@@ -1,4 +1,4 @@
-define(["jquery", "configuration", "datatables"], function($, config, DataTable) {
+define(["jquery", "configuration", "datatables", "moment"], function($, config, DataTable, moment) {
 
 	var _host = window.location.host;
 	var _oWebService = config.webServiceSettings[_host];
@@ -46,19 +46,19 @@ define(["jquery", "configuration", "datatables"], function($, config, DataTable)
 					var newArray = [];
 					$.each(json.rows, function(index, row) {
 						if (row['_id'] == event) {
-								$.each(row["s1"], function(index, element) {
-									temp = new Object();
-									temp["timestamp"] = Object.keys(element)[0];
-									temp["s1"] = element[Object.keys(element)[0]];
-									s2obj = row["s2"][index];
-									if(Object.keys(s2obj)[0] == temp["timestamp"]) {
-										temp["s2"] = s2obj[Object.keys(s2obj)[0]];
-									} else {
-										temp["s2"] = "";
-									}
-			
-									newArray.push(temp);
-								});
+							$.each(row["s1"], function(index, element) {
+								temp = new Object();
+								temp["timestamp"] = Object.keys(element)[0];
+								temp["s1"] = element[Object.keys(element)[0]];
+								s2obj = row["s2"][index];
+								if (Object.keys(s2obj)[0] == temp["timestamp"]) {
+									temp["s2"] = s2obj[Object.keys(s2obj)[0]];
+								} else {
+									temp["s2"] = "";
+								}
+
+								newArray.push(temp);
+							});
 						}
 						if (row['_id'] == 'client_config') {
 							config = row;
@@ -74,6 +74,15 @@ define(["jquery", "configuration", "datatables"], function($, config, DataTable)
 				"targets" : 0,
 				"data" : "timestamp",
 				"title" : "TimeStamp",
+				"render" : function(data) {
+					var setTimeFormat = localStorage['time-format'];
+					if (setTimeFormat != undefined) {
+						useTime = setTimeFormat;
+					} else {
+						useTime = localStorage['defaultTimeFormat'];
+					}
+					return moment(data).format(useTime);
+				}
 			}, {
 				"targets" : 1,
 				"data" : "s1",

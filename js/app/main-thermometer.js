@@ -1,6 +1,10 @@
-require(["jquery", "temp-tables", "temp-graphs", "datatables", "temp-charts"], function($, tempTable, tempGraph, DataTable, tempCharts) {
+require(["jquery", "temp-tables", "temp-graphs", "datatables", "temp-charts", "events"], function($, tempTable, tempGraph, DataTable, tempCharts, Events) {
 
 	tempTable.getEventList('#selectEvent');
+
+	$('#add-event').on('click', function() {
+		Events.eventBuilder();
+	});
 
 	$('#selectEvent').on('change', function(evt) {
 		tempCharts.destroyChart();

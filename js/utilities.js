@@ -1,4 +1,4 @@
-define([ "jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables" ], function($, noty, chosen, modal, alert, typeahead, DataTable) {
+define(["jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables"], function($, noty, chosen, modal, alert, typeahead, DataTable) {
 	// ------------- Functions ---------------
 
 	// Gets the users current location and redirects them to the login page.
@@ -31,21 +31,25 @@ define([ "jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables"
 	// Gets the current User Preferences and displays a modal to modify them.
 	var getPreferences = function() {
 		var pModal;
-		currentDoc = document.location.pathname.match(/[^\/]+$/)[0];
-		if (sessionStorage.PreferencesHomePage == null || sessionStorage.PreferencesHomePage != currentDoc) {
-			dHomePage = '<p>Set current page as your Default? <input data-no-uniform="true" type="checkbox" id="setDefaultPage" value="' + currentDoc
-					+ '" disabled></p>';
+		var defaultTimeFormat = 'ddd. h:m';
+		var setTimeFormat = localStorage['time-format'];
+		if (setTimeFormat != undefined) {
+			useTime = setTimeFormat;
 		} else {
-			dHomePage = '<p>' + getCurrentPage() + ' is set as your Default Page. </p>';
+			useTime = defaultTimeFormat;
 		}
-		pModal = '<div class="modal hide fade dynamicModalElement" id="myPreferences">' + '<div class="modal-header">'
-				+ '<button type="button" class="close" data-dismiss="modal"></button>' + '<h3>My Preferences</h3>' + '</div>'
-				+ '<div class="modal-body">';
-		pModal += dHomePage;
-		pModal += '</div>' + '<div class="modal-footer">' + '<a href="#" class="btn cancelModal" data-dismiss="modal">Close</a>'
-				+ '<a href="#" class="btn btn-primary submitPrefChange">Save changes</a>' + '</div>' + '</div>';
+		currentDoc = document.location.pathname.match(/[^\/]+$/)[0];
+		dTimeFormat = '<p>Set the displayed Time Format? <input data-no-uniform="true" type="text" id="setTimeFormat" value="' + useTime + '"></p>';
+		pModal = '<div class="modal hide fade dynamicModalElement" id="myPreferences">' + '<div class="modal-header">' + '<button type="button" class="close" data-dismiss="modal"></button>' + '<h3>My Preferences</h3>' + '</div>' + '<div class="modal-body">';
+		pModal += dTimeFormat;
+		pModal += '</div>' + '<div class="modal-footer">' + '<a href="#" class="btn cancelModal" data-dismiss="modal">Close</a>' + '<a href="#" class="btn btn-primary submitPrefChange">Save changes</a>' + '</div>' + '</div>';
 
 		displayModal('#myPreferences', pModal);
+		
+		$('.submitPrefChange').on("click", function() {
+		localStorage['time-format'] = $('input#setTimeFormat').val();
+		$('#myPreferences').modal('hide');
+	});
 
 	};
 
@@ -85,7 +89,7 @@ define([ "jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables"
 			$('#ConfirmModal').modal('hide');
 		});
 
-		console.log(confirmVal)
+		console.log(confirmVal);
 		return confirmVal;
 
 	};
@@ -98,7 +102,7 @@ define([ "jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables"
 	};
 
 	var toTitleCase = function(str, oldChar, newChar) {
-		if (typeof (oldChar) === 'undefined' || typeof (newChar) === 'undefined') {
+		if ( typeof (oldChar) === 'undefined' || typeof (newChar) === 'undefined') {
 			return str.replace(/\w\S*/g, function(txt) {
 				return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 			});
@@ -144,54 +148,51 @@ define([ "jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables"
 		$('.modal').modal('hide');
 	});
 
-	$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
-	{
+	$.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings) {
 		return {
-			"iStart":         oSettings._iDisplayStart,
-			"iEnd":           oSettings.fnDisplayEnd(),
-			"iLength":        oSettings._iDisplayLength,
-			"iTotal":         oSettings.fnRecordsTotal(),
-			"iFilteredTotal": oSettings.fnRecordsDisplay(),
-			"iPage":          Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
-			"iTotalPages":    Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
+			"iStart" : oSettings._iDisplayStart,
+			"iEnd" : oSettings.fnDisplayEnd(),
+			"iLength" : oSettings._iDisplayLength,
+			"iTotal" : oSettings.fnRecordsTotal(),
+			"iFilteredTotal" : oSettings.fnRecordsDisplay(),
+			"iPage" : Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+			"iTotalPages" : Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
 		};
 	}
-	$.extend( $.fn.dataTableExt.oPagination, {
-		"bootstrap": {
-			"fnInit": function( oSettings, nPaging, fnDraw ) {
+	$.extend($.fn.dataTableExt.oPagination, {
+		"bootstrap" : {
+			"fnInit" : function(oSettings, nPaging, fnDraw) {
 				var oLang = oSettings.oLanguage.oPaginate;
-				var fnClickHandler = function ( e ) {
+				var fnClickHandler = function(e) {
 					e.preventDefault();
-					if ( oSettings.oApi._fnPageChange(oSettings, e.data.action) ) {
-						fnDraw( oSettings );
+					if (oSettings.oApi._fnPageChange(oSettings, e.data.action)) {
+						fnDraw(oSettings);
 					}
 				};
 
-				$(nPaging).addClass('pagination').append(
-					'<ul>'+
-						'<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
-						'<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
-					'</ul>'
-				);
+				$(nPaging).addClass('pagination').append('<ul>' + '<li class="prev disabled"><a href="#">&larr; ' + oLang.sPrevious + '</a></li>' + '<li class="next disabled"><a href="#">' + oLang.sNext + ' &rarr; </a></li>' + '</ul>');
 				var els = $('a', nPaging);
-				$(els[0]).bind( 'click.DT', { action: "previous" }, fnClickHandler );
-				$(els[1]).bind( 'click.DT', { action: "next" }, fnClickHandler );
+				$(els[0]).bind('click.DT', {
+					action : "previous"
+				}, fnClickHandler);
+				$(els[1]).bind('click.DT', {
+					action : "next"
+				}, fnClickHandler);
 			},
 
-			"fnUpdate": function ( oSettings, fnDraw ) {
+			"fnUpdate" : function(oSettings, fnDraw) {
 				var iListLength = 5;
 				var oPaging = oSettings.oInstance.fnPagingInfo();
 				var an = oSettings.aanFeatures.p;
-				var i, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
+				var i, j, sClass, iStart, iEnd, iHalf = Math.floor(iListLength / 2);
 
-				if ( oPaging.iTotalPages < iListLength) {
+				if (oPaging.iTotalPages < iListLength) {
 					iStart = 1;
 					iEnd = oPaging.iTotalPages;
-				}
-				else if ( oPaging.iPage <= iHalf ) {
+				} else if (oPaging.iPage <= iHalf) {
 					iStart = 1;
 					iEnd = iListLength;
-				} else if ( oPaging.iPage >= (oPaging.iTotalPages-iHalf) ) {
+				} else if (oPaging.iPage >= (oPaging.iTotalPages - iHalf)) {
 					iStart = oPaging.iTotalPages - iListLength + 1;
 					iEnd = oPaging.iTotalPages;
 				} else {
@@ -199,30 +200,28 @@ define([ "jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables"
 					iEnd = iStart + iListLength - 1;
 				}
 
-				for ( i=0, iLen=an.length ; i<iLen ; i++ ) {
+				for ( i = 0, iLen = an.length; i < iLen; i++) {
 					// remove the middle elements
 					$('li:gt(0)', an[i]).filter(':not(:last)').remove();
 
 					// add the new list items and their event handlers
-					for ( j=iStart ; j<=iEnd ; j++ ) {
-						sClass = (j==oPaging.iPage+1) ? 'class="active"' : '';
-						$('<li '+sClass+'><a href="#">'+j+'</a></li>')
-							.insertBefore( $('li:last', an[i])[0] )
-							.bind('click', function (e) {
-								e.preventDefault();
-								oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * oPaging.iLength;
-								fnDraw( oSettings );
-							} );
+					for ( j = iStart; j <= iEnd; j++) {
+						sClass = (j == oPaging.iPage + 1) ? 'class="active"' : '';
+						$('<li ' + sClass + '><a href="#">' + j + '</a></li>').insertBefore($('li:last', an[i])[0]).bind('click', function(e) {
+							e.preventDefault();
+							oSettings._iDisplayStart = (parseInt($('a', this).text(), 10) - 1) * oPaging.iLength;
+							fnDraw(oSettings);
+						});
 					}
 
 					// add / remove disabled classes from the static elements
-					if ( oPaging.iPage === 0 ) {
+					if (oPaging.iPage === 0) {
 						$('li:first', an[i]).addClass('disabled');
 					} else {
 						$('li:first', an[i]).removeClass('disabled');
 					}
 
-					if ( oPaging.iPage === oPaging.iTotalPages-1 || oPaging.iTotalPages === 0 ) {
+					if (oPaging.iPage === oPaging.iTotalPages - 1 || oPaging.iTotalPages === 0) {
 						$('li:last', an[i]).addClass('disabled');
 					} else {
 						$('li:last', an[i]).removeClass('disabled');
@@ -231,8 +230,7 @@ define([ "jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables"
 			}
 		}
 	});
-	
-	
+
 	return {
 		getCurrentPage : getCurrentPage,
 		setToLogin : setToLogin,

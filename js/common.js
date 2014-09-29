@@ -34,7 +34,8 @@ requirejs.config({
 		"temp-charts" : "views/temperature-charts",
 		"d3" : "thirdparty/d3.min",
 		"charts" : "thirdparty/Chart",
-		"moment" : "thirdparty/moment.min"
+		"moment" : "thirdparty/moment.min",
+		"events" : "views/temperature-events"
 	},
 	// shim
 	shim : {
@@ -59,9 +60,13 @@ requirejs.config({
 	}
 });
 
-require([ "jquery", "utilities", "menu", "dropdown", "jquery-ui", "theme", "uniform", "tab" ], function($, util, menu) {
+require([ "jquery", "utilities", "menu", "configuration", "dropdown", "jquery-ui", "theme", "uniform", "tab", "transition" ], function($, util, menu, config) {
+
+		var _oClientSettings = config.clientSettings['default'];
 
 		menu.getMenu('.main-menu');
+		
+		localStorage['defaultTimeFormat'] = _oClientSettings.DefaultTimeFormat;
 
 		$( document ).ready( function() {
 		$('ul.main-menu li a').each(function() {
