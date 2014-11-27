@@ -235,7 +235,7 @@ define(["jquery", "configuration", "charts", "moment"], function($, config, Char
 		if(myLineChart != null) {
 			myLineChart.destroy();	
 		}
-	}
+	};
 
 	return {
 		showLineChart : showLineChart,

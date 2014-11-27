@@ -3,7 +3,7 @@
 	<head>
 
 		<meta charset="utf-8">
-		<title>OnQue - Barbeque / Smoker Data Collection</title>
+		<title>Pimometer - Barbeque / Smoker Data Collector</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description"
 		content="Barbeque and Smoker data collection and interface for a raspberry pi thermometer">
@@ -44,35 +44,6 @@
 
 		<!-- The fav icon -->
 		<link rel="shortcut icon" href="img/favicon.ico">
-		<style>
-			/* tell the SVG path to be a thin blue line without any area fill */
-			path {
-				stroke: steelblue;
-				stroke-width: 1;
-				fill: none;
-			}
-
-			.axis {
-				shape-rendering: crispEdges;
-			}
-
-			.x.axis line {
-				stroke: lightgrey;
-			}
-
-			.x.axis .minor {
-				stroke-opacity: .5;
-			}
-
-			.x.axis path {
-				display: none;
-			}
-
-			.y.axis line, .y.axis path {
-				fill: none;
-				stroke: #000;
-			}
-		</style>
 	</head>
 
 	<body class="custom_container">
@@ -82,13 +53,12 @@
 				<div class="container-fluid">
 					<a class="btn btn-navbar" data-toggle="collapse"
 					data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span> </a><a class="brand" href="index.html"> <img alt="Logo"
-					src="img/onQueLogo.png" height="30%" width="30%" /></a>
+					class="icon-bar"></span> </a><a class="brand" href="index.html"> Pimometer</a>
 
 					<!-- theme selector starts -->
 					<div class="btn-group pull-right theme-container">
 						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> <i class="icon-tint"></i><span class="hidden-phone"> Change
-							Theme</span> <span class="caret"></span> </a>
+							Theme </span> <span class="caret"></span> </a>
 						<ul class="dropdown-menu" id="themes"></ul>
 					</div>
 					<!-- theme selector ends -->
@@ -97,7 +67,7 @@
 					<div class="btn-group pull-right">
 						<a class="btn dropdown-toggle tour-step6" data-toggle="dropdown"
 						href="#"> <i class="icon-user"></i><span
-						class="hidden-phone display-user"> Account</span> <span
+						class="hidden-phone display-user"> Settings </span> <span
 						class="caret"></span> </a>
 						<ul class="dropdown-menu">
 							<li>
@@ -112,14 +82,6 @@
 		<!-- topbar ends -->
 		<div class="container-fluid">
 			<div class="row-fluid">
-
-				<!-- left menu starts -->
-				<div class="span2 main-menu-span tour-step1">
-					<div class="well nav-collapse sidebar-nav">
-						<ul class="nav nav-tabs nav-stacked main-menu"></ul>
-					</div>
-					<!--/.well -->
-				</div>
 				<!--/span-->
 				<!-- left menu ends -->
 
@@ -133,28 +95,55 @@
 					</div>
 				</noscript>
 
-				<div id="content" class="span10">
+				<div id="content" class="span12 center">
 					<div class="row-fluid">
-						<div class="box span12">
-							<div class="box-header well" data-original-title>
-								<h2>Select Event</h2>
-							</div>
-							<div class="box-content">
-								<form class="form-horizontal" id="eventForm" action="">
-									<fieldset>
-										<div class="control-group">
-											<label class="control-label" for="selectEvent"> Events </label>
-											<div class="controls">
-												<select data-placeholder="Select an Event" name="event" id="selectEvent" data-rel="chosen">
-													<option value=""></option>
-												</select>
-												<a id="add-event" href="#">Create a New Event </a>
-											</div>
-										</div>
-									</fieldset>
-								</form>
+						<div class="span3">
+							<div class="btn-group">
+								<button type="button" class="btn btn-large btn-primary dropdown-toggle" data-toggle="dropdown">
+									Events <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" id="select-event" role="menu">
+
+								</ul>
+								<button class="btn btn-large btn-large btn-primary" id="add-event" data-toggle="tooltip" title="Add Event">
+									<i class="icon icon-white icon-plus"></i>
+								</button>
+								<button class="btn btn-large btn-primary" data-toggle="tooltip" title="Start Event">
+									<i class="icon icon-white icon-check"></i>
+								</button>
+								<button class="btn btn-large btn-primary" data-toggle="tooltip" title="Edit Event">
+									<i class="icon icon-white icon-gear"></i>
+								</button>
+								<button class="btn btn-large btn-primary" data-toggle="tooltip" title="Set Reminder">
+									<i class="icon icon-white icon-clock"></i>
+								</button>
+								<button class="btn btn-large btn-primary" data-toggle="tooltip" title="Remove Event">
+									<i class="icon icon-white icon-trash"></i>
+								</button>
+
 							</div>
 						</div>
+						<div class="span6">
+								<div class="span3">
+									<a class="well top-block" href="#"> <i class="red"></i>
+									<div>
+										Sensor 1
+									</div>
+									<div id="s1-current">
+										
+									</div> <span class="notification" id="max-temp">666</span> </a>
+								</div>
+								<div class="span3">
+									<a class="well top-block" href="#"> <i class="red"></i>
+									<div>
+										Sensor 2
+									</div>
+									<div id="s2-current">
+										
+									</div> <span class="notification" id="max-temp">555</span> </a>
+								</div>
+						</div>
+
 					</div>
 					<!-- content starts -->
 					<div class="row-fluid">
@@ -162,7 +151,7 @@
 							<div class="box-header well" data-original-title>
 								<h2></h2>
 							</div>
-							<div class="box-content">	
+							<div class="box-content">
 								<div class="span10 center"	>
 									<canvas class="chart" id="myChart1"></canvas>
 								</div>

@@ -32,10 +32,13 @@ requirejs.config({
 		"temp-tables" : "views/temperature-tables",
 		"temp-graphs" : "views/temperature-graphs",
 		"temp-charts" : "views/temperature-charts",
+		"temp-current" : "views/temperature-current",
 		"d3" : "thirdparty/d3.min",
 		"charts" : "thirdparty/Chart",
 		"moment" : "thirdparty/moment.min",
-		"events" : "views/temperature-events"
+		"events" : "views/temperature-events",
+		"yocto-api" : "thirdparty/yocto_api",
+		"yocto-temp" : "thirdparty/yocto_temperature"
 	},
 	// shim
 	shim : {
@@ -56,11 +59,12 @@ requirejs.config({
 		"noty" : [ "jquery" ],
 		"history" : [ "jquery" ],
 		"serialize-object" : [ "jquery" ],
-		"charisma" : [ "jquery" ]
+		"charisma" : [ "jquery" ],
+		"yocto-temp" : [ "yocto-api"]
 	}
 });
 
-require([ "jquery", "utilities", "menu", "configuration", "dropdown", "jquery-ui", "theme", "uniform", "tab", "transition" ], function($, util, menu, config) {
+require([ "jquery", "utilities", "menu", "configuration", "dropdown", "jquery-ui", "theme", "uniform", "tab", "transition", "tooltip", "popover", "button" ], function($, util, menu, config) {
 
 		var _oClientSettings = config.clientSettings['default'];
 

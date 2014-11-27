@@ -45,11 +45,11 @@ define(["jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables"]
 		pModal += '</div>' + '<div class="modal-footer">' + '<a href="#" class="btn cancelModal" data-dismiss="modal">Close</a>' + '<a href="#" class="btn btn-primary submitPrefChange">Save changes</a>' + '</div>' + '</div>';
 
 		displayModal('#myPreferences', pModal);
-		
+
 		$('.submitPrefChange').on("click", function() {
-		localStorage['time-format'] = $('input#setTimeFormat').val();
-		$('#myPreferences').modal('hide');
-	});
+			localStorage['time-format'] = $('input#setTimeFormat').val();
+			$('#myPreferences').modal('hide');
+		});
 
 	};
 
@@ -126,6 +126,14 @@ define(["jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables"]
 		}
 	};
 
+	var toFahrenheit = function(value, float) {
+		var degF = '&deg;F';
+		var retVal = value * 1.8 + 32;
+		retVal = parseFloat(retVal.toPrecision(float));
+		retVal = retVal + '&deg; F';
+
+		return retVal;
+	};
 	// -------------- End Functions --------------
 
 	// $(document).on("click", ".submitPrefChange" ,function(event){
@@ -158,7 +166,7 @@ define(["jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables"]
 			"iPage" : Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
 			"iTotalPages" : Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
 		};
-	}
+	};
 	$.extend($.fn.dataTableExt.oPagination, {
 		"bootstrap" : {
 			"fnInit" : function(oSettings, nPaging, fnDraw) {
@@ -240,6 +248,7 @@ define(["jquery", "noty", "chosen", "modal", "alert", "typeahead", "datatables"]
 		confirmationModal : confirmationModal,
 		displayModal : displayModal,
 		toTitleCase : toTitleCase,
-		checkMissing : checkMissing
+		checkMissing : checkMissing,
+		toFahrenheit : toFahrenheit
 	};
 });
