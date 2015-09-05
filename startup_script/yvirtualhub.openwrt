@@ -1,0 +1,51 @@
+#!/bin/sh /etc/rc.common
+
+###################################################################
+## EDIT THIS SECTION WITH YOUR SPECIFIC PARAMETERS
+# VIRTUALHUB_BIN : where is the actual executable
+VIRTUALHUB_BIN=/usr/sbin/VirtualHub
+#
+# VIRTUALHUB_LOGFILE: if set the virtual hub will save the log into
+#                     into this file
+VIRTUALHUB_LOGFILE=/var/log/virtualhub.log
+#
+# VIRTUALHUB_SETTINGS: the file where the virtual hub will save his
+#                      persisant setting
+VIRTUALHUB_SETTINGS=/etc/vhub.byn
+#
+# END OF EDIT SECTION
+##################################################################
+
+
+# If the VirtualHub is not there, then exit.
+if [ ! -e $VIRTUALHUB_BIN ]; then
+  echo "VirtualHub binary is invalid ($VIRTUALHUB_BIN)"
+  exit 5
+fi
+
+if [ ! -x $VIRTUALHUB_BIN ]; then
+  echo "VirtualHub binary has not the executable flag set"
+  exit 5
+fi
+
+
+
+START=50
+STOP=50
+ 
+
+start() {
+        START_OPTION="-d"
+        if [ -n $VIRTUALHUB_LOGFILE ];then
+          START_OPTION=$START_OPTION" -g "$VIRTUALHUB_LOGFILE
+        fi
+
+        if [ -n $VIRTUALHUB_SETTINGS ];then
+          START_OPTION=$START_OPTION" -c "$VIRTUALHUB_SETTINGS
+        fi
+        service_start $VIRTUALHUB_BIN $START_OPTION
+}
+
+stop() {
+        service_stop $VIRTUALHUB_BIN
+}

@@ -1,0 +1,112 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          yVirtualHub
+# Required-Start:    networking
+# Required-Stop:     networking
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop Yoctopuce Virtual Hub
+# Description:       Start/stop Yoctopuce Virtual Hub
+#                    more info can be found on www.yoctopuce.com
+### END INIT INFO
+
+###################################################################
+## EDIT THIS SECTION WITH YOUR SPECIFIC PARAMETERS
+# VIRTUALHUB_BIN : where is the actual executable
+VIRTUALHUB_BIN=/usr/sbin/VirtualHub
+#
+# VIRTUALHUB_LOGFILE: if set the virtual hub will save the log into
+#                     into this file
+VIRTUALHUB_LOGFILE=/var/log/virtualhub.log
+#
+# VIRTUALHUB_SETTINGS: the file where the virtual hub will save his
+#                      persisant setting
+VIRTUALHUB_SETTINGS=/etc/vhub.byn
+#
+# END OF EDIT SECTION
+##################################################################
+
+
+
+# Process name ( For display )
+NAME=VirtualHub
+# pid file for the VritualHub
+PIDFILE=/var/run/virtualhub.pid
+
+# Using the lsb functions to perform the operations.
+. /lib/lsb/init-functions
+# If the VirtualHub is not there, then exit.
+if [ ! -e $VIRTUALHUB_BIN ]; then
+  echo "VirtualHub binary is invalid ($VIRTUALHUB_BIN)"
+  exit 5
+fi
+
+if [ ! -x $VIRTUALHUB_BIN ]; then
+  echo "VirtualHub binary has not the executable flag set"
+  exit 5
+fi
+
+case $1 in
+ start)
+  # Checked the PID file exists and check the actual status of process
+  if [ -e $PIDFILE ]; then
+   status_of_proc -p $PIDFILE $VIRTUALHUB_BIN "$NAME process" && status="0" || status="$?"
+   # If the status is SUCCESS then don't need to start again.
+   if [ $status = "0" ]; then
+    exit # Exit
+   fi
+  fi
+
+  START_OPTION="-d"
+  if [ -n $VIRTUALHUB_LOGFILE ];then
+    START_OPTION=$START_OPTION" -g "$VIRTUALHUB_LOGFILE
+  fi
+
+  if [ -n $VIRTUALHUB_SETTINGS ];then
+    START_OPTION=$START_OPTION" -c "$VIRTUALHUB_SETTINGS
+  fi
+
+  # Start the daemon.
+  log_daemon_msg "Starting the process" "$NAME"
+  # Start the daemon with the help of start-stop-daemon
+  # Log the message appropriately
+  if start-stop-daemon --start --quiet --oknodo  --exec $VIRTUALHUB_BIN -- $START_OPTION ; then
+   cat /dev/null >  $PIDFILE
+   pidof $VIRTUALHUB_BIN >>  $PIDFILE
+   log_end_msg 0
+  else
+   log_end_msg 1
+  fi
+  ;;
+ stop)
+  # Stop the daemon.
+  if [ -e $PIDFILE ]; then
+   status_of_proc -p $PIDFILE $VIRTUALHUB_BIN "Stoppping the $NAME process" && status="0" || status="$?"
+   if [ "$status" = 0 ]; then
+    start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE
+    /bin/rm -rf $PIDFILE
+   fi
+  else
+   log_daemon_msg "$NAME process is not running"
+   log_end_msg 0
+  fi
+  ;;
+ restart)
+  # Restart the daemon.
+  $0 stop && sleep 2 && $0 start
+  ;;
+ status)
+  # Check the status of the process.
+  if [ -e $PIDFILE ]; then
+   status_of_proc -p $PIDFILE $VIRTUALHUB_BIN "$NAME process" && exit 0 || exit $?
+  else
+   log_daemon_msg "$NAME Process is not running"
+   log_end_msg 0
+  fi
+  ;;
+ *)
+  # For invalid arguments, print the usage message.
+  echo "Usage: $0 {start|stop|restart|status}"
+  exit 2
+  ;;
+esac

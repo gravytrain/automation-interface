@@ -1,0 +1,61 @@
+Définir les droits d'accès aux périphériques USB
+
+Pour fonctionner correctement, la libraire Yoctopuce et le VirtualHub ont
+besoin d'avoir accès en écriture à tous les périphériques USB Yoctopuce. 
+Or, par défaut, sous Linux les droits d'accès des utilisateurs non-root
+à USB sont limités à la lecture. Afin d'éviter de devoir lancer le VirtualHub 
+ou votre code en tant que root, il faut créer une nouvelle règle udev pour 
+autoriser un ou plusieurs utilisateurs à accéder en écriture aux périphériques 
+Yoctopuce. 
+
+Pour ajouter une règle udev à votre installation, il faut ajouter un fichier 
+avec un nom au format "##-nomArbitraire.rules" dans le répertoire 
+"/etc/udev/rules.d". Lors du démarrage du système, udev va lire tous les 
+fichiers avec l'extension ".rules" de ce répertoire en respectant l'ordre 
+alphabétique (par exemple, le fichier "51-first.rules" sera interprété AVANT 
+le fichier "50-udev-default.rules"). 
+
+Le fichier "50-udev-default" contient les règles udev par défaut du système. 
+Pour modifier le comportement par défaut du système, il faut donc créer un 
+fichier qui commence par un nombre plus petit que 50. Notez que pour ajouter 
+une règle vous aurez besoin d'avoir un accès root sur le système. 
+
+Dans le répertoire udev_conf nous avons mis deux exemples de règles qui vous 
+éviterons de devoirs partir de zéro.
+
+Exemple 1: 51-yoctopuce.rules
+
+Cette règles va autoriser tous les utilisateurs à accéder en lecture et en 
+écriture aux périphériques Yoctopuce USB. Les droits d'accès pour
+tous les autres périphériques ne seront pas modifié. Si ce scénario vous 
+convient il suffit de copier le fichier "51-yoctopuce_all.rules"
+dans le répertoire "/etc/udev/rules.d" et de redémarrer votre système.
+
+	# udev rules to allow write access to all users for Yoctopuce USB devices
+	SUBSYSTEM=="usb", ATTR{idVendor}=="24e0", MODE="0666"
+
+Exemple 2: 51-yoctopuce_group.rules
+
+Cette règles va autoriser le groupe "yoctogroup" à accéder en lecture et 
+écriture aux périphériques Yoctopuce USB. Les droits d'accès pour
+tous les autres périphériques ne seront pas modifié. Si ce scénario vous 
+convient il suffit de copier le fichier "51-yoctopuce_group.rules"
+dans le répertoire "/etc/udev/rules.d" et de redémarrer votre système.
+
+	# udev rules to allow write access to all users of "yoctogroup" for Yoctopuce USB devices
+	SUBSYSTEM=="usb", ATTR{idVendor}=="24e0", MODE="0664",  GROUP="yoctogroup"
+
+
+Démarrer le VirtualHub avec systemd (Fedora, openSUSE, Arch Linux, Angstrom...)
+===============================================================================
+- 1 copier le binaire VitualHub dans /usr/sbin 
+- 2: Verifier que /usr/sbin/Virtualhub est exécutable :
+    # chmod +x /usr/sbin/VirtualHub
+- 3: copier le script de démarrage dans /etc/systemd/system/
+    # cp startup_script/yvirtualhub.service /etc/systemd/system/
+- 4: recharger la configuration de systemd
+    # systemctl daemon-reload	
+- 5: vérifier que l'on peut démarer le VirtualHub avec 
+    # systemctl start yvirtualhub.service
+- 6: activer le VirtualHub au démarrage
+    # systemctl enable yvirtualhub.service

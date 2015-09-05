@@ -13,7 +13,7 @@ define(["jquery", "configuration", "datatables", "moment"], function($, config, 
 			success : function(json) {
 				$.each(json.rows, function(index, row) {
 					if (row['_id'] != 'client_config') {
-						$(selector).append($('<option></option>').attr('value', row['_id']).text(row['_id']));
+						$(selector).append($('<li></li>').attr('value', row['_id']).text(row['_id']));
 					}
 				});
 			}

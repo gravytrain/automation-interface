@@ -1,0 +1,10 @@
+[Unit]
+Description=Yoctopuce VirtualHub
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/VirtualHub -c /etc/vhub.byn
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

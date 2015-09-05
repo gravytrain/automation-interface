@@ -1,0 +1,2 @@
+- add Support for QNAP NAS that use Intel processor
+- fix error message "Unable to start USB IO thread (ypkt_win:746)"

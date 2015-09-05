@@ -1,0 +1,5 @@
+- Add custom server field on emoncms configuration panel
+- Fix gzip encoding of web page (Midori support)
+- Fix logs produced by flash function
+- Fix possible problem with saving of calibration settings
+- minor fixes and improvement
