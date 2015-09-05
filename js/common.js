@@ -32,6 +32,7 @@ requirejs.config({
 		"temp-tables" : "views/temperature-tables",
 		"temp-graphs" : "views/temperature-graphs",
 		"temp-charts" : "views/temperature-charts",
+		"temp-current" : "views/temperature-current",
 		"d3" : "thirdparty/d3.min",
 		"charts" : "thirdparty/Chart",
 		"moment" : "thirdparty/moment.min",
@@ -58,7 +59,8 @@ requirejs.config({
 		"noty" : [ "jquery" ],
 		"history" : [ "jquery" ],
 		"serialize-object" : [ "jquery" ],
-		"charisma" : [ "jquery" ]
+		"charisma" : [ "jquery" ],
+		"yocto-temp" : [ "yocto-api"]
 	}
 });
 

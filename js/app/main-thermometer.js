@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 require(["jquery", "temp-tables", "temp-graphs", "datatables", "temp-charts", "events", "yocto-api", "yocto-temp"], function($, tempTable, tempGraph, DataTable, tempCharts, Events) {
+=======
+require(["jquery", "temp-tables", "temp-graphs", "datatables", "temp-charts", "events", "temp-current"], function($, tempTable, tempGraph, DataTable, tempCharts, Events, tempCurr) {
+>>>>>>> eb5e259f432504036186b6480cf453e7f19abc8c
 
 	tempTable.getEventList('#select-event');
 
@@ -14,12 +18,12 @@ require(["jquery", "temp-tables", "temp-graphs", "datatables", "temp-charts", "e
 		$('#historic-s1').empty();
 		$('#graph').empty();
 
-//		tempTable.displayEventDetails('#historic-s1', selected, 's1', function(data) {
-//			tempCharts.showLineChart('#myChart1', data);
-//		});
-//		tempTable.displayEventDetails('#historic-s2', selected, 's2', function(data) {
-//			tempCharts.showLineChart('#myChart2', data);
-//		});
+		tempTable.displayEventDetails('#historic-s1', selected, 's1', function(data) {
+			tempCharts.showLineChart('#myChart1', data);
+		});
+		tempTable.displayEventDetails('#historic-s2', selected, 's2', function(data) {
+			tempCharts.showLineChart('#myChart2', data);
+		});
 	});
 
 	if (yRegisterHub('http://127.0.0.1:4444/') != YAPI_SUCCESS) {
@@ -44,11 +48,14 @@ require(["jquery", "temp-tables", "temp-graphs", "datatables", "temp-charts", "e
 		temp2 = yFindTemperature(serial + ".temperature2");
 
 		if (temp1.isOnline()) {
-			$('#s1-sensor').html(temp1.get_currentValue());
-			$('#s2-sensor').html(temp2.get_currentValue());
+			var s1 = toFahrenheit(temp1.get_currentValue(), 4);
+			var s2 = toFahrenheit(temp2.get_currentValue(), 4);
+			
+			$('#s1-current').append(s1);
+			$('#s2-current').append(s2);
 		} else {
-			$('#s1-sensor').html('DCed');
-			$('#s2-sensor').html('DCed');
+			$('#s1-current').append('DCed');
+			$('#s2-current').append('DCed');
 		}
 		setTimeout('refresh()', 5000);
 	}

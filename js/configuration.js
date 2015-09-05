@@ -17,7 +17,9 @@ define({
 			"RequestTimeout" : 10000,
 			"TimezoneOffset" : "put an offset here",
 			"NumberSensors"	: 2,
-			"DefaultTimeFormat" : "ddd. h:m"
+			"DefaultTimeFormat" : "ddd. h:m",
+			"TemperatureScale" : "F",
+			"ThermocoupleSerial" : ""
 		}
 	},
 
